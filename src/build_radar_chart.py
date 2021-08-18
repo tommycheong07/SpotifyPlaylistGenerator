@@ -1,6 +1,7 @@
 import plotly.express as px
 import pandas as pd
 
+## Function to transform json to a dataframe for needed track analysis
 def jsonToPD(json):
     appendDF = pd.DataFrame({"danceability": [json[0]['danceability']],
                             'energy': [json[0]['energy']],
@@ -11,6 +12,7 @@ def jsonToPD(json):
                             })
     return appendDF
 
+## Create a radar graph of track analysis
 def createRadar(df):    
     newPD = pd.DataFrame(dict(
         r = [df['danceability'].mean(), df['energy'].mean(),
