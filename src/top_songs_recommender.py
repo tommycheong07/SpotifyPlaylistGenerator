@@ -15,6 +15,9 @@ print("What is the description of the " + title + " playlist?")
 description = input()
 print("Would you like this to be a public or private playlist? public or private")
 public = input()
+while (public != 'public' or public != 'private'):
+    print("Please enter 'private' or 'public' for playlist visibility")
+    public = input()
 if public == 'public':
     public = True
 else:
@@ -61,7 +64,7 @@ for idx, item in enumerate(top_tracks['items']):
     recs = sp.recommendations(seed_artists=artistID, seed_genres=top3Genres, seed_tracks=trackID, limit=3, country='US')
 
     for idx, r in enumerate(recs['tracks']):
-        # sp.user_playlist_add_tracks(user = user['id'], playlist_id = playlist_id, tracks = [r['uri']])
+        sp.user_playlist_add_tracks(user = user['id'], playlist_id = playlist_id, tracks = [r['uri']])
         json = sp.audio_features(r['id'])
         trackDF = build_radar_chart.jsonToPD(json)
         df = df.append(trackDF)

@@ -1,0 +1,17 @@
+.albumn-logo img {
+    width: 200;
+    height: 200;
+    margin-top: 50;
+}
+
+.generate-button {
+    margin-top: 10;
+}
+
+.title {
+    font-size: 50px;
+}
+
+.left-button, .right-button {
+    margin-top: 250;
+}

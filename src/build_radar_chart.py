@@ -16,8 +16,8 @@ def jsonToPD(json):
 def createRadar(df):    
     newPD = pd.DataFrame(dict(
         r = [df['danceability'].mean(), df['energy'].mean(),
-            df['acousticness'].mean(), df['instrumentalness'].mean(), df['liveness'].mean(),
-            df['valence'].mean()],
+            df['acousticness'].mean(), df['instrumentalness'].mean(), 
+            df['liveness'].mean(), df['valence'].mean()],
         theta = ['danceability', 'energy', 'acousticness', 'instrumentalness', 'liveness', 'valence']))
 
     fig = px.line_polar(newPD, r='r', theta='theta', line_close=True)
