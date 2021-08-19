@@ -28,6 +28,21 @@
 	<div class = "title col-xs-12 center">
         Spotify Playlist Generator
     </div>
+
+    <div class = "authorization center col-xs-12">
+        <p>Input Spotify Client ID here</p>
+	    <div class="client-id-container">
+		<input id='client-id'/>
+        <p>Input Spotify Client Secret here</p>
+	    <div class="client-secret-container">
+		<input id='client-secret'/>
+	    </div>
+        <div class = "authorize-button center">
+            <button type="button">Authorize</button>
+        </div>
+
+    </div>
+
     <div class = "generate-button center col-xs-12">
         <button type="button">Generate Playlist</button>
 
@@ -47,7 +62,7 @@
         <div class="col-xs-3"></div>
 
         <div class = "song-info col-xs-12 center">
-            song title - artist name
+            <p>song title - artist name</p>
         </div>
 
 
@@ -56,5 +71,7 @@
 
 
 </body>
+
+<script src="interactions.js"></script>
 
 </html>
