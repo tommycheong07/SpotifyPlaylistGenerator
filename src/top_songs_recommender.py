@@ -15,9 +15,6 @@ print("What is the description of the " + title + " playlist?")
 description = input()
 print("Would you like this to be a public or private playlist? public or private")
 public = input()
-while (public != 'public' or public != 'private'):
-    print("Please enter 'private' or 'public' for playlist visibility")
-    public = input()
 if public == 'public':
     public = True
 else:

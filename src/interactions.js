@@ -4,6 +4,14 @@ const generatePlaylist = document.querySelector('.generate-button');
 const songInfo = document.querySelector('.song-info')
 const authorizeButton = document.querySelector('.authorize-button');
 
+var redirect_uri = "http://localhost:8000";
+const authorize = "https://accounts.spotify.com/authorize"
+const TOKEN = "https://accounts.spotify.com/api/token";
+const top_songs = "https://api.spotify.com/v1/me/top/tracks"
+const artist = "https://api.spotify.com/v1/artists/"
+
+let code = null;
+
 
 likeSong.addEventListener("click", function() {
     songInfo.innerHTML = 'like';
@@ -14,26 +22,13 @@ dislikeSong.addEventListener("click", function() {
 });
 
 generatePlaylist.addEventListener("click", function() {
-    alert("generate playlist button pressed")
+    callAPI("GET", top_songs, null, getTopSongs);
     
 });
 
 authorizeButton.addEventListener("click", function(){
-    requestAuthorization()
+    requestAuthorization();
 })
-
-
-var redirect_uri = "http://localhost:8000";
-var client_info_not_set = true;
-var client_id = "";
-var client_secret = "";
-var testID = "";
-let code = null;
-let refresh_token = null;
-let access_token = null;
-
-const authorize = "https://accounts.spotify.com/authorize"
-const TOKEN = "https://accounts.spotify.com/api/token";
 
 
 function requestAuthorization() {
@@ -82,7 +77,6 @@ function callAuthorizationAPI(body) {
     let xhr = new XMLHttpRequest();
     xhr.open("POST", TOKEN, true);
     xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-    // xhr.setRequestHeader('Authorization', 'Basic ' + btoa(sessionStorage.getItem("client_id") + ":" + sessionStorage.getItem("client_secret")));
     xhr.send(body);
     xhr.onload = handleAuthorizationResponse;
 }
@@ -91,7 +85,6 @@ function handleAuthorizationResponse() {
     if (this.status == 200){
         var data = JSON.parse(this.responseText);
         console.log(data);
-        var data = JSON.parse(this.responseText);
         if ( data.access_token != undefined ){
             access_token = data.access_token;
             sessionStorage.setItem("access_token", access_token);
@@ -102,6 +95,78 @@ function handleAuthorizationResponse() {
         }
         onPageLoad();
     }
-    console.log("access_token:" + sessionStorage.getItem("access_token"))
-    console.log("refresh_token:" + sessionStorage.getItem("refresh_token"))
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+}
+
+function callAPI(method, url, body, callback) {
+    let xhr = new XMLHttpRequest();
+    xhr.open(method, url, true);
+    xhr.setRequestHeader("Content-Type", "application/json");
+    xhr.setRequestHeader("Authorization", "Bearer " + sessionStorage.getItem("access_token"))
+    xhr.send(body);
+    xhr.onload = callback;
+}
+
+let genreList = new Map();
+let top3Genres = [];
+
+function getTopSongs() {
+    if (this.status == 200){
+        var data = JSON.parse(this.responseText);
+        console.log(data);
+        for (key in data.items) {
+            // console.log(data.items[key].artists[0].id, data.items[key].artists[0].name)
+            callAPI("GET", artist+data.items[key].artists[0].id, null, getArtistGenres)
+        }
+    }
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+
+    // console.log(genreList);
+    // sort by value
+    let mapSort1 = new Map([...genreList.entries()].sort((a, b) => b[1] - a[1]));
+    console.log(mapSort1);
+
+    let idx = 0;
+    for (let [key, value] of mapSort1) {
+        if (idx == 3) {
+            break
+        }
+        top3Genres.push(key)
+        idx += 1
+    }
+
+    // idx = 0;
+    // for (genre in mapSort1) {
+    //     if (idx == 3) {
+    //         break;
+    //     }
+    //     console.log(genre)
+    //     // top3Genres.push(genre);
+    //     idx += 1;
+    // }
+    console.log(top3Genres);
+}
+
+function getArtistGenres() {
+    if (this.status == 200){
+        var data = JSON.parse(this.responseText);
+        for (key in data.genres) {
+            let keyVal = data.genres[key];
+            if(genreList.has(keyVal)) {
+                genreList.set(keyVal, genreList.get(keyVal) + 1);
+             } else {
+                genreList.set(keyVal, 1);
+             }
+        }
+    }
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
 }
