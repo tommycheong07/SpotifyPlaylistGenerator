@@ -129,5 +129,4 @@ dmypy.json
 .pyre/
 
 # credentials
-src/cred.py
-src/cred.js
+docs/cred.py
