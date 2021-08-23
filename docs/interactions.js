@@ -21,7 +21,7 @@ likeSong.addEventListener("click", function() {
     if (recommendedSongsData.length == 0) {
         alert("No more recommended songs")
     } else {
-        if (sessionStorage.getItem('playlist_id') != 'null') {
+        if (sessionStorage.getItem('playlist_id') !== null) {
             urlToSend = 'https://api.spotify.com/v1/playlists/'+ sessionStorage.getItem('playlist_id') +'/tracks'
             urlToSend += '?uris=' + recommendedSongsData[0][3];
             callAPI("POST", urlToSend, null, addSongToPlaylist);
