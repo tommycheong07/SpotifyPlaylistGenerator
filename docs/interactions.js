@@ -21,10 +21,11 @@ likeSong.addEventListener("click", function() {
     if (recommendedSongsData.length == 0) {
         alert("No more recommended songs")
     } else {
-        urlToSend = 'https://api.spotify.com/v1/playlists/'+ sessionStorage.getItem('playlist_id') +'/tracks'
-        urlToSend += '?uris=' + recommendedSongsData[0][3];
-        callAPI("POST", urlToSend, null, addSongToPlaylist);
-        
+        if (sessionStorage.getItem('playlist_id') != 'null') {
+            urlToSend = 'https://api.spotify.com/v1/playlists/'+ sessionStorage.getItem('playlist_id') +'/tracks'
+            urlToSend += '?uris=' + recommendedSongsData[0][3];
+            callAPI("POST", urlToSend, null, addSongToPlaylist);
+        }
         recommendedSongsData.splice(0, 1);
         songPhoto.src = recommendedSongsData[0][1];
         songPreview.src = recommendedSongsData[0][2];
