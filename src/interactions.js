@@ -3,27 +3,47 @@ const likeSong = document.querySelector('.right-button');
 const generatePlaylist = document.querySelector('.generate-button');
 const songInfo = document.querySelector('.song-info')
 const authorizeButton = document.querySelector('.authorize-button');
+const songPhoto = document.getElementById('song-photo')
 
 var redirect_uri = "http://localhost:8000";
 const authorize = "https://accounts.spotify.com/authorize"
 const TOKEN = "https://accounts.spotify.com/api/token";
 const top_songs = "https://api.spotify.com/v1/me/top/tracks"
 const artist = "https://api.spotify.com/v1/artists/"
+const recommendations = "https://api.spotify.com/v1/recommendations"
 
 let code = null;
-
+let notFirstClick = false;
 
 likeSong.addEventListener("click", function() {
-    songInfo.innerHTML = 'like';
+    if (recommendedSongsData.length == 0) {
+        alert("No more recommended songs")
+    } else {
+        console.log(recommendedSongsData[0][1]);
+        songPhoto.src = recommendedSongsData[0][1];
+        songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
+        recommendedSongsData.splice(0, 1);
+    }
 });
 
 dislikeSong.addEventListener("click", function() {
-    songInfo.innerHTML = 'dislike';
+    if (recommendedSongsData.length == 0) {
+        alert("No more recommended songs")
+    } else {
+        songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
+        recommendedSongsData.splice(0, 1);
+    }
 });
 
 generatePlaylist.addEventListener("click", function() {
     callAPI("GET", top_songs, null, getTopSongs);
-    
+    console.log("HELLO CLIKC CLICK" + notFirstClick);
+    if (notFirstClick) {
+        songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4]
+        recommendedSongsData.splice(0, 1);
+    }    
+    notFirstClick = true;
+
 });
 
 authorizeButton.addEventListener("click", function(){
@@ -127,8 +147,7 @@ function getTopSongs() {
         alert(this.responseText);
     }
 
-    // console.log(genreList);
-    // sort by value
+    // sort by value and find top 3 genres
     let mapSort1 = new Map([...genreList.entries()].sort((a, b) => b[1] - a[1]));
     console.log(mapSort1);
 
@@ -140,17 +159,8 @@ function getTopSongs() {
         top3Genres.push(key)
         idx += 1
     }
-
-    // idx = 0;
-    // for (genre in mapSort1) {
-    //     if (idx == 3) {
-    //         break;
-    //     }
-    //     console.log(genre)
-    //     // top3Genres.push(genre);
-    //     idx += 1;
-    // }
     console.log(top3Genres);
+    getRecommendedSongs();
 }
 
 function getArtistGenres() {
@@ -168,5 +178,51 @@ function getArtistGenres() {
     else {
         console.log(this.responseText);
         alert(this.responseText);
+    }
+}
+
+let recommendedSongsData = []
+
+function getRecommendedSongs() {
+    callAPI("GET", top_songs, null, prepareRecSeeds);
+}
+
+function prepareRecSeeds() {
+    if (this.status == 200){
+        let genresToSend = top3Genres.join();
+        var data = JSON.parse(this.responseText);
+        console.log(data);
+        recommendedSongsData = [];
+        for (key in data.items) {
+            urlToSend = recommendations;
+            urlToSend += "?limit=3&market=US"
+            urlToSend += "&seed_artists=" + data.items[key].artists[0].id;
+            urlToSend += "&seed_genres=" + genresToSend;
+            urlToSend += "&seed_tracks=" + data.items[key].id;
+            callAPI("GET", urlToSend, null, getRecommendations);
+        }
+    }
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+
+    console.log(recommendedSongsData)
+}
+
+function getRecommendations() {
+
+    if (this.status == 200) {
+        let data = JSON.parse(this.responseText);
+
+        for (key in data.tracks) {
+            albumn_img = data.tracks[key]['album']['images'][0].url;
+            preview_url = data.tracks[key].preview_url;
+            title = data.tracks[key].name;
+            song_uri = data.tracks[key].uri;
+            song_artist = data.tracks[key]['artists'][0].name
+
+            recommendedSongsData.push([title, albumn_img, preview_url, song_uri, song_artist]);
+        }
     }
 }
