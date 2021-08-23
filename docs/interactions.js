@@ -7,7 +7,7 @@ const authorizeButton = document.querySelector('.authorize-button');
 const songPhoto = document.getElementById('song-photo');
 const songPreview = document.getElementById('song-preview');
 
-var redirect_uri = "http://localhost:8000";
+var redirect_uri = "https://thomas-cheong.com/SpotifyPlaylistGenerator/";
 const authorize = "https://accounts.spotify.com/authorize"
 const TOKEN = "https://accounts.spotify.com/api/token";
 const top_songs = "https://api.spotify.com/v1/me/top/tracks"
