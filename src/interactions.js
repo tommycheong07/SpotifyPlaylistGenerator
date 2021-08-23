@@ -1,6 +1,7 @@
 const dislikeSong = document.querySelector('.left-button');
 const likeSong = document.querySelector('.right-button');
 const generatePlaylist = document.querySelector('.generate-button');
+const createPlaylistButton = document.querySelector('.create-playlist');
 const songInfo = document.querySelector('.song-info')
 const authorizeButton = document.querySelector('.authorize-button');
 const songPhoto = document.getElementById('song-photo');
@@ -12,6 +13,7 @@ const TOKEN = "https://accounts.spotify.com/api/token";
 const top_songs = "https://api.spotify.com/v1/me/top/tracks"
 const artist = "https://api.spotify.com/v1/artists/"
 const recommendations = "https://api.spotify.com/v1/recommendations"
+const user = "https://api.spotify.com/v1/me"
 
 let code = null;
 
@@ -47,6 +49,12 @@ dislikeSong.addEventListener("click", function() {
         songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
         recommendedSongsData.splice(0, 1);
     }
+});
+
+createPlaylistButton.addEventListener("click", function() {
+
+    callAPI("GET", user, null, getUserData)
+
 });
 
 generatePlaylist.addEventListener("click", function() {
@@ -251,3 +259,41 @@ function getRecommendations() {
     }
 }
 
+function getUserData() {
+    if (this.status == 200){
+        var data = JSON.parse(this.responseText);
+
+        sessionStorage.setItem("user_profile_id", data.id);
+
+        playlistTitle = document.getElementById('playlist-name').value;
+        playlistDescription = document.getElementById('playlist-description').value;
+        checkboxPlaylist = document.getElementById('playlist-type');
+        publicPlaylist = false;
+        if (checkboxPlaylist.checked) {
+            publicPlaylist = true;
+        }
+
+        body = {}
+        body.name = playlistTitle;
+        body.description = playlistDescription;
+        body.public = publicPlaylist;
+
+        callAPI("POST", "https://api.spotify.com/v1/users/"+data.id+"/playlists", JSON.stringify(body), createPlaylist)
+    }
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+}
+
+function createPlaylist() {
+    if (this.status == 201){
+        var data = JSON.parse(this.responseText)
+        sessionStorage.setItem("playlist_id", data.id);
+        alert("playlist created :)")
+    }
+    else {
+        console.log(this.responseText);
+        alert(this.responseText);
+    }
+}
