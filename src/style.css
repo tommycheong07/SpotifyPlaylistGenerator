@@ -4,7 +4,7 @@
     margin-top: 50;
 }
 
-.authorize-button {
+.authorize-button, .create-playlist {
     margin-top: 10;
 }
 
@@ -18,4 +18,13 @@
 
 .left-button, .right-button {
     margin-top: 250;
+}
+
+.authorize-button{
+    margin-top: 20;
+    margin-bottom: 50;
+}
+
+.client-id-container, .client-secret-container, .playlist-name-container, .playlist-description-container, .playlist-type-button, .title {
+    margin-bottom: 20;
 }

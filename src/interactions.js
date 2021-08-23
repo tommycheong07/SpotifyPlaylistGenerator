@@ -14,7 +14,6 @@ const artist = "https://api.spotify.com/v1/artists/"
 const recommendations = "https://api.spotify.com/v1/recommendations"
 
 let code = null;
-let notFirstClick = false;
 
 likeSong.addEventListener("click", function() {
     if (recommendedSongsData.length == 0) {
@@ -52,21 +51,19 @@ dislikeSong.addEventListener("click", function() {
 
 generatePlaylist.addEventListener("click", function() {
     callAPI("GET", top_songs, null, getTopSongs);
-    console.log("HELLO CLIKC CLICK" + notFirstClick);
-    if (notFirstClick) {
-        songPhoto.src = recommendedSongsData[0][1];
-        songPreview.src = recommendedSongsData[0][2];
-        if (songPreview.src == 'null') {
-            console.log(recommendedSongsData[0][2])
-        } else {
-            console.log(recommendedSongsData[0][2])
-            document.getElementById('song-control').load();
-        }
-        songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
-        recommendedSongsData.splice(0, 1);
-    }    
-    notFirstClick = true;
-
+    if(recommendedSongsData.length == 0) {
+        alert("click generate song again")
+    }
+    songPhoto.src = recommendedSongsData[0][1];
+    songPreview.src = recommendedSongsData[0][2];
+    if (songPreview.src == 'null') {
+        console.log(recommendedSongsData[0][2])
+    } else {
+        console.log(recommendedSongsData[0][2])
+        document.getElementById('song-control').load();
+    }
+    songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
+    recommendedSongsData.splice(0, 1);
 });
 
 authorizeButton.addEventListener("click", function(){
@@ -159,7 +156,7 @@ let top3Genres = [];
 function getTopSongs() {
     if (this.status == 200){
         var data = JSON.parse(this.responseText);
-        console.log(data);
+        // console.log(data);
         for (key in data.items) {
             // console.log(data.items[key].artists[0].id, data.items[key].artists[0].name)
             callAPI("GET", artist+data.items[key].artists[0].id, null, getArtistGenres)
@@ -172,8 +169,9 @@ function getTopSongs() {
 
     // sort by value and find top 3 genres
     let mapSort1 = new Map([...genreList.entries()].sort((a, b) => b[1] - a[1]));
-    console.log(mapSort1);
+    // console.log(mapSort1);
 
+    top3Genres = [];
     let idx = 0;
     for (let [key, value] of mapSort1) {
         if (idx == 3) {
@@ -182,7 +180,7 @@ function getTopSongs() {
         top3Genres.push(key)
         idx += 1
     }
-    console.log(top3Genres);
+    // console.log(top3Genres);
     getRecommendedSongs();
 }
 
@@ -214,7 +212,7 @@ function prepareRecSeeds() {
     if (this.status == 200){
         let genresToSend = top3Genres.join();
         var data = JSON.parse(this.responseText);
-        console.log(data);
+        // console.log(data);
         recommendedSongsData = [];
         for (key in data.items) {
             urlToSend = recommendations;
@@ -230,7 +228,7 @@ function prepareRecSeeds() {
         alert(this.responseText);
     }
 
-    console.log(recommendedSongsData)
+    // console.log(recommendedSongsData)
 }
 
 function getRecommendations() {
@@ -239,6 +237,7 @@ function getRecommendations() {
         let data = JSON.parse(this.responseText);
 
         for (key in data.tracks) {
+            // console.log(data.tracks[key])
             albumn_img = data.tracks[key]['album']['images'][0].url;
             preview_url = data.tracks[key].preview_url;
             title = data.tracks[key].name;
@@ -247,5 +246,8 @@ function getRecommendations() {
 
             recommendedSongsData.push([title, albumn_img, preview_url, song_uri, song_artist]);
         }
+    } else {
+        console.log(this.responseText)
     }
 }
+
