@@ -3,7 +3,8 @@ const likeSong = document.querySelector('.right-button');
 const generatePlaylist = document.querySelector('.generate-button');
 const songInfo = document.querySelector('.song-info')
 const authorizeButton = document.querySelector('.authorize-button');
-const songPhoto = document.getElementById('song-photo')
+const songPhoto = document.getElementById('song-photo');
+const songPreview = document.getElementById('song-preview');
 
 var redirect_uri = "http://localhost:8000";
 const authorize = "https://accounts.spotify.com/authorize"
@@ -19,8 +20,14 @@ likeSong.addEventListener("click", function() {
     if (recommendedSongsData.length == 0) {
         alert("No more recommended songs")
     } else {
-        console.log(recommendedSongsData[0][1]);
         songPhoto.src = recommendedSongsData[0][1];
+        songPreview.src = recommendedSongsData[0][2];
+        if (songPreview.src == 'null') {
+            console.log(recommendedSongsData[0][2])
+        } else {
+            console.log(recommendedSongsData[0][2])
+            document.getElementById('song-control').load();
+        }
         songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
         recommendedSongsData.splice(0, 1);
     }
@@ -30,6 +37,14 @@ dislikeSong.addEventListener("click", function() {
     if (recommendedSongsData.length == 0) {
         alert("No more recommended songs")
     } else {
+        songPhoto.src = recommendedSongsData[0][1];
+        songPreview.src = recommendedSongsData[0][2];
+        if (songPreview.src == 'null') {
+            console.log(recommendedSongsData[0][2])
+        } else {
+            console.log(recommendedSongsData[0][2])
+            document.getElementById('song-control').load();
+        }
         songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
         recommendedSongsData.splice(0, 1);
     }
@@ -39,7 +54,15 @@ generatePlaylist.addEventListener("click", function() {
     callAPI("GET", top_songs, null, getTopSongs);
     console.log("HELLO CLIKC CLICK" + notFirstClick);
     if (notFirstClick) {
-        songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4]
+        songPhoto.src = recommendedSongsData[0][1];
+        songPreview.src = recommendedSongsData[0][2];
+        if (songPreview.src == 'null') {
+            console.log(recommendedSongsData[0][2])
+        } else {
+            console.log(recommendedSongsData[0][2])
+            document.getElementById('song-control').load();
+        }
+        songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
         recommendedSongsData.splice(0, 1);
     }    
     notFirstClick = true;
