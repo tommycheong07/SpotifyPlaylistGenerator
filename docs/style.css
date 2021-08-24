@@ -1,28 +1,32 @@
-.albumn-logo img {
-    width: 200;
-    height: 200;
-    margin-top: 50;
+.title {
+    font-size: 50px;
 }
 
-.authorize-button, .create-playlist {
+.authorize-button {
+    margin-top: 100;
+}
+
+.create-playlist, .skip, .next {
     margin-top: 10;
+}
+
+.authorize-button{
+    margin-top: 20;
+    margin-bottom: 50;
 }
 
 .generate-button {
     margin-top: 50;
 }
 
-.title {
-    font-size: 50px;
+.albumn-logo img {
+    width: 200;
+    height: 200;
+    margin-top: 50;
 }
 
 .left-button, .right-button {
     margin-top: 250;
-}
-
-.authorize-button{
-    margin-top: 20;
-    margin-bottom: 50;
 }
 
 .client-id-container, .client-secret-container, .playlist-name-container, .playlist-description-container, .playlist-type-button, .title {
