@@ -24,8 +24,8 @@ function requestAuthorization() {
     let url = authorize;
     url += "?client_id=" + '6e553f9c5d0a4b0fabceb647f896d4d8';
     url += "&response_type=token";
-    // url += "&redirect_uri=" + 'https://thomas-cheong.com/SpotifyPlaylistGenerator/'
-    url += "&redirect_uri=" + 'http://localhost:8000'
+    url += "&redirect_uri=" + 'https://thomas-cheong.com/SpotifyPlaylistGenerator/'
+    // url += "&redirect_uri=" + 'http://localhost:8000'
     url += "&show_dialog=true";
     url += "&scope=user-top-read playlist-modify-public playlist-modify-private user-read-private user-read-email"
     window.location = url;
