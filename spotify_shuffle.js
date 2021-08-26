@@ -69,12 +69,12 @@ dislikeSong.addEventListener("click", function() {
 
 generatePlaylist.addEventListener("click", function() {
     callAPI("GET", top_songs, null, getTopSongs);
-    if(recommendedSongsData.length == 0) {
-        alert("click generate song again")
-    } else {
-        recommendedSongsData.splice(0, 1);
-        alert("Songs Are Generated, Press 'Like' To Start!")
-    }
+    // if(recommendedSongsData.length == 0) {
+    //     alert("click generate song again")
+    // } else {
+    //     recommendedSongsData.splice(0, 1);
+    //     alert("Songs Are Generated, Press 'Like' To Start!")
+    // }
 });
 
 function callAPI(method, url, body, callback) {
@@ -92,14 +92,15 @@ let top3Genres = [];
 function getTopSongs() {
     if (this.status == 200){
         var data = JSON.parse(this.responseText);
-        // console.log(data);
+        console.log("HI")
+        console.log(data);
         for (key in data.items) {
             // console.log(data.items[key].artists[0].id, data.items[key].artists[0].name)
             callAPI("GET", artist+data.items[key].artists[0].id, null, getArtistGenres)
         }
     }
     else {
-        console.log(this.responseText);
+        console.log(this.status, this.responseText);
         alert(this.responseText);
     }
 

@@ -23,29 +23,51 @@
 </head>
 
 
-<body onload="onPageLoad()" class="body">
+<body class="body">
 
 	<div class = "title col-xs-12 center">
         Spotify Playlist Generator
     </div>
 
-    <div class = col-xs-12 center>
-        <div class = "authorizations">
-            <div class = "authorization center col-xs-12">
-                <div class = "authorize-button center">
-                    <button class = "w3-green" type="button" >Sign Into Spotify</button>
-                </div>
-				<div class = "next center">
-                    <button type="button" >Next</button>
-                </div>
+    <div class="col-xs-12">
+
+        <div class = "generate-button center col-xs-12">
+            <button type="button">Generate Songs</button>
+    
+        </div> 
+
+        <div class = "albumn-swipe col-xs-12">
+            <div class="col-xs-3"></div>
+            <div class="left-button col-xs-1">
+                <button class="w3-button w3-left w3-light-grey">&laquo; Dislike</button>
             </div>
+            <div class = "albumn-logo col-xs-4 center">
+                <img id="song-photo" src="Resources/spotify.png">    
+            </div>
+            <div class="right-button col-xs-1">
+                <button class="w3-button w3-right w3-green">Like &raquo;</button>
+            </div>
+            <div class="col-xs-3"></div>
+    
+            <div class = "song-info col-xs-12 center">
+                <p>song title - artist name</p>
+            </div>
+            <div class = "song-audio col-xs-12 center">
+                <audio id="song-control" controls autoplay>
+                    <source id="song-preview" src= "" type="audio/mpeg"/>
+                    Your browser does not support the audio tag.
+                  </audio>
+            </div>
+    
+    
         </div>
+
     </div>
 
 
 
 </body>
 
-<script src="authorization.js"></script>
+<script src="spotify_shuffle.js"></script>
 
 </html>

@@ -4,10 +4,12 @@ const nextButton = document.querySelector('.next');
 
 
 const user = "https://api.spotify.com/v1/me"
+const top_songs = "https://api.spotify.com/v1/me/top/tracks"
+
 
 
 skipButton.addEventListener("click", function() {
-    window.location.href = "spotify_tinder.html"
+    window.location.href = "spotify_shuffle.html"
 });
 
 createPlaylistButton.addEventListener("click", function() {
@@ -15,7 +17,7 @@ createPlaylistButton.addEventListener("click", function() {
 });
 
 nextButton.addEventListener("click", function() {
-    window.location.href = "spotify_tinder.html"
+    window.location.href = "spotify_shuffle.html"
 })
 
 function callAPI(method, url, body, callback) {
@@ -30,6 +32,8 @@ function callAPI(method, url, body, callback) {
 function getUserData() {
     if (this.status == 200){
         var data = JSON.parse(this.responseText);
+        console.log("HI")
+        console.log(data)
 
         sessionStorage.setItem("user_profile_id", data.id);
 
@@ -49,7 +53,7 @@ function getUserData() {
         callAPI("POST", "https://api.spotify.com/v1/users/"+data.id+"/playlists", JSON.stringify(body), createPlaylist)
     }
     else {
-        console.log(this.responseText);
+        console.log(this.responseText, this.status, this.response);
         alert(this.responseText);
     }
 }
