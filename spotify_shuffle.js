@@ -13,16 +13,9 @@ let firstLike = true;
 
 
 likeSong.addEventListener("click", function() {
-    if (recommendedSongsData.length == 0) {
-        alert("No more recommended songs")
-    } else {
-        if (sessionStorage.getItem('playlist_id') !== null) {
-             urlToSend = 'https://api.spotify.com/v1/playlists/'+ sessionStorage.getItem('playlist_id') +'/tracks'
-             urlToSend += '?uris=' + recommendedSongsData[0][3];
-             callAPI("POST", urlToSend, null, addSongToPlaylist);
-             console.log(recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4]);
-        }
+    if (firstLike) {
         recommendedSongsData.splice(0, 1);
+        firstLike = false;
         songPhoto.src = recommendedSongsData[0][1];
         songPreview.src = recommendedSongsData[0][2];
         if (songPreview.src == 'null') {
@@ -31,7 +24,28 @@ likeSong.addEventListener("click", function() {
             console.log(recommendedSongsData[0][2])
             document.getElementById('song-control').load();
         }
+        songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
+    } else {
+        if (recommendedSongsData.length == 0) {
+            alert("No more recommended songs")
+        } else {
+            if (sessionStorage.getItem('playlist_id') !== null) {
+                urlToSend = 'https://api.spotify.com/v1/playlists/'+ sessionStorage.getItem('playlist_id') +'/tracks'
+                urlToSend += '?uris=' + recommendedSongsData[0][3];
+                callAPI("POST", urlToSend, null, addSongToPlaylist);
+                console.log(recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4]);
+            }
+            recommendedSongsData.splice(0, 1);
+            songPhoto.src = recommendedSongsData[0][1];
+            songPreview.src = recommendedSongsData[0][2];
+            if (songPreview.src == 'null') {
+                console.log(recommendedSongsData[0][2])
+            } else {
+                console.log(recommendedSongsData[0][2])
+                document.getElementById('song-control').load();
+            }
             songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
+        }
     }
 });
 
@@ -56,23 +70,10 @@ generatePlaylist.addEventListener("click", function() {
     callAPI("GET", top_songs, null, getTopSongs);
 
     if(recommendedSongsData.length == 0) {
-        alert("click generate song again")
+        alert("click generate song again");
     } else {
-        recommendedSongsData.splice(0, 1);
+        alert("Songs generated! Click 'Add' To Start!");
     }
-
-    recommendedSongsData.splice(0, 1);
-
-    songPhoto.src = recommendedSongsData[0][1];
-    songPreview.src = recommendedSongsData[0][2];
-    if (songPreview.src == 'null') {
-        console.log(recommendedSongsData[0][2])
-    } else {
-        console.log(recommendedSongsData[0][2])
-        document.getElementById('song-control').load();
-    }
-    songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
-
 });
 
 function callAPI(method, url, body, callback) {
@@ -90,10 +91,7 @@ let top3Genres = [];
 function getTopSongs() {
     if (this.status == 200){
         var data = JSON.parse(this.responseText);
-        console.log("HI")
-        console.log(data);
         for (key in data.items) {
-            // console.log(data.items[key].artists[0].id, data.items[key].artists[0].name)
             callAPI("GET", artist+data.items[key].artists[0].id, null, getArtistGenres)
         }
     }
