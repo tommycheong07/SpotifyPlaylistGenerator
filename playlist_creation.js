@@ -6,6 +6,18 @@ const nextButton = document.querySelector('.next');
 const user = "https://api.spotify.com/v1/me"
 const top_songs = "https://api.spotify.com/v1/me/top/tracks"
 
+function onPageLoad() {
+    var hash = window.location.hash.substring(1);
+    var params = {}
+    hash.split('&').map(hk => { 
+      let temp = hk.split('='); 
+        params[temp[0]] = temp[1] 
+    });
+
+    let token = params.access_token;
+    sessionStorage.setItem('access_token', token)
+};
+
 
 
 skipButton.addEventListener("click", function() {
