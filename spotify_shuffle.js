@@ -13,40 +13,26 @@ let firstLike = true;
 
 
 likeSong.addEventListener("click", function() {
-    // if (firstLike) {
-    //     recommendedSongsData.splice(0, 1);
-    //     firstLike = false;
-    //     songPhoto.src = recommendedSongsData[0][1];
-    //     songPreview.src = recommendedSongsData[0][2];
-    //     if (songPreview.src == 'null') {
-    //         console.log(recommendedSongsData[0][2])
-    //     } else {
-    //         console.log(recommendedSongsData[0][2])
-    //         document.getElementById('song-control').load();
-    //     }
-    //     songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
-    // } else {
-        if (recommendedSongsData.length == 0) {
-            alert("No more recommended songs")
-        } else {
-            if (sessionStorage.getItem('playlist_id') !== null) {
-                urlToSend = 'https://api.spotify.com/v1/playlists/'+ sessionStorage.getItem('playlist_id') +'/tracks'
-                urlToSend += '?uris=' + recommendedSongsData[0][3];
-                callAPI("POST", urlToSend, null, addSongToPlaylist);
-                console.log(recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4]);
-            }
-            recommendedSongsData.splice(0, 1);
-            songPhoto.src = recommendedSongsData[0][1];
-            songPreview.src = recommendedSongsData[0][2];
-            if (songPreview.src == 'null') {
-                console.log(recommendedSongsData[0][2])
-            } else {
-                console.log(recommendedSongsData[0][2])
-                document.getElementById('song-control').load();
-            }
-            songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
+    if (recommendedSongsData.length == 0) {
+        alert("No more recommended songs")
+    } else {
+        if (sessionStorage.getItem('playlist_id') !== null) {
+             urlToSend = 'https://api.spotify.com/v1/playlists/'+ sessionStorage.getItem('playlist_id') +'/tracks'
+             urlToSend += '?uris=' + recommendedSongsData[0][3];
+             callAPI("POST", urlToSend, null, addSongToPlaylist);
+             console.log(recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4]);
         }
-    // }
+        recommendedSongsData.splice(0, 1);
+        songPhoto.src = recommendedSongsData[0][1];
+        songPreview.src = recommendedSongsData[0][2];
+        if (songPreview.src == 'null') {
+            console.log(recommendedSongsData[0][2])
+        } else {
+            console.log(recommendedSongsData[0][2])
+            document.getElementById('song-control').load();
+        }
+            songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
+    }
 });
 
 dislikeSong.addEventListener("click", function() {
@@ -69,7 +55,12 @@ dislikeSong.addEventListener("click", function() {
 generatePlaylist.addEventListener("click", function() {
     callAPI("GET", top_songs, null, getTopSongs);
 
-    recommendedSongsData.splice(0, 1);
+    if(recommendedSongsData.length == 0) {
+        alert("click generate song again")
+    } else {
+        recommendedSongsData.splice(0, 1);
+    }
+
     recommendedSongsData.splice(0, 1);
 
     songPhoto.src = recommendedSongsData[0][1];

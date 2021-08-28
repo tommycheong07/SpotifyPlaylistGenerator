@@ -8,14 +8,6 @@ const scopes = ["user-top-read", "playlist-modify-public", "playlist-modify-priv
 const delimiter = "%20";
 const scope_param = scopes.join(delimiter);
 
-// nextButton.addEventListener("click", function() {
-//     if (sessionStorage.getItem("access_token") === null) {
-//         alert("Please Log Into Spotify")
-//     } else {
-//         window.location.href = "playlist_creation.html"
-//     }
-// })
-
 authorizeButton.addEventListener("click", function(){
     requestAuthorization();
 })
@@ -35,14 +27,3 @@ function alertAuthentication() {
     alert("Due to Spotify Developer guidelines, if you are not  added as a user of this app, you will not be able to experience it as you are not be authorized."); 
 }
 
-// function handleRedirect() {
-//     var hash = window.location.hash.substring(1);
-//     var params = {}
-//     hash.split('&').map(hk => { 
-//       let temp = hk.split('='); 
-//         params[temp[0]] = temp[1] 
-//     });
-
-//     let token = params.access_token;
-//     sessionStorage.setItem('access_token', token)
-// }
