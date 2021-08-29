@@ -27,7 +27,7 @@ likeSong.addEventListener("click", function() {
         songInfo.innerHTML = recommendedSongsData[0][0] + " by " + recommendedSongsData[0][4];
     } else {
         if (recommendedSongsData.length == 0) {
-            alert("No more recommended songs")
+            alert("No more recommended songs. Press 'Re-generate' to add more to the shuffle!")
         } else {
             if (sessionStorage.getItem('playlist_id') !== null) {
                 urlToSend = 'https://api.spotify.com/v1/playlists/'+ sessionStorage.getItem('playlist_id') +'/tracks'
@@ -51,7 +51,7 @@ likeSong.addEventListener("click", function() {
 
 dislikeSong.addEventListener("click", function() {
     if (recommendedSongsData.length == 0) {
-        alert("No more recommended songs")
+        alert("No more recommended songs. Press 'Re-generate' to add more to the shuffle!")
     } else {
         recommendedSongsData.splice(0, 1);
         songPhoto.src = recommendedSongsData[0][1];
@@ -68,12 +68,9 @@ dislikeSong.addEventListener("click", function() {
 
 generatePlaylist.addEventListener("click", function() {
     callAPI("GET", top_songs, null, getTopSongs);
+    document.getElementById('generate-button').innerHTML = "Re-generate Songs";
+    alert("Songs Generated! Click 'Add' To Start!");
 
-    if(recommendedSongsData.length == 0) {
-        alert("click generate song again");
-    } else {
-        alert("Songs generated! Click 'Add' To Start!");
-    }
 });
 
 function callAPI(method, url, body, callback) {
